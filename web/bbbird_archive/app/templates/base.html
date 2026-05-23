@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}BBBird Archive{% endblock %}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+
+    <body>
+        <div class="topbar">
+            <a href="{{ url_for('index') }}" class="logo">
+                <span class="logo-icon">🐦</span>
+                <span class="logo-text">BBBird <em>Archive</em></span>
+            </a>
+            <nav>
+                <a href="{{ url_for('index') }}" class="active">Browse</a>
+                <a href="#scrape-section">Upload</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <span class="footer-logo">🐦 BBBird Archive</span>
+                <span class="footer-text">Preserving avian imagery for future generations.</span>
+                <span class="footer-text">A project inspired by the Internet Archive.</span>
+            </div>
+        </footer>
+    </body>
+</html>

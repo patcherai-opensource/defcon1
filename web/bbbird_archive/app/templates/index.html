@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}BBBird Archive — Waybird Machine{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <div class="hero-inner">
+        <div class="hero-icon">🐦</div>
+        <h1 class="hero-title">The Waybird Machine</h1>
+        <p class="hero-sub">Capturing &amp; archiving bird imagery across the web since 2026.</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num">{{ images|length if images else 0 }}</span>
+                <span class="stat-label">Birds Archived</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">∞</span>
+                <span class="stat-label">Birds Remaining</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-wave"></div>
+</div>
+
+<section id="scrape-section" class="scrape-section">
+    <div class="section-inner">
+        <div class="scrape-box">
+            <div class="scrape-header">
+                <span class="scrape-icon">🔍</span>
+                <div>
+                    <h2 class="scrape-title">Capture a Bird</h2>
+                    <p class="scrape-desc">Paste an image URL — we fetch, verify &amp; archive it.</p>
+                </div>
+            </div>
+            <form class="scrape-form" action="{{ url_for('scrape') }}" method="post">
+                <div class="form-row">
+                    <input type="url" name="url" placeholder="https://example.com/bird-photo.jpg" required autofocus>
+                    <button type="submit" class="btn-scrape">
+                        <span class="btn-icon">⬇</span> Archive
+                    </button>
+                </div>
+                <details class="auth-toggle">
+                    <summary>Image requires authentication?</summary>
+                    <div class="auth-fields">
+                        <input type="text" name="username" placeholder="Username">
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                </details>
+            </form>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-group">
+                {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">
+                    <span class="flash-text">{{ message }}</span>
+                    <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</section>
+
+{% if flags %}
+<section class="flags-section">
+    <div class="section-inner">
+        {% for flag in flags %}
+        <div class="flag-banner">{{ flag.flag }}</div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="archive-section">
+    <div class="section-inner">
+        <div class="archive-header">
+            <h2 class="section-head">Bird Archive</h2>
+            <span class="section-sub">All verified specimens.</span>
+        </div>
+
+        {% if images %}
+        <div class="grid">
+            {% for img in images %}
+            <div class="card">
+                <div class="card-img-wrap">
+                    <img src="{{ url_for('static', filename='scraped/' + img.filename) }}" alt="Archived bird" loading="lazy">
+                    <span class="card-format">{{ img.type or '?' }}</span>
+                </div>
+                <div class="meta">
+                    <span class="meta-dims">{{ img.width or '?' }} × {{ img.height or '?' }}px · {{ (img.size / 1024)|round(1) if img.size else '?' }} KB</span>
+                    <span class="meta-url" title="{{ img.url }}">{{ img.url }}</span>
+                    <span class="meta-date">{{ img.time.strftime('%Y-%m-%d %H:%M UTC') if img.time else 'unknown' }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="empty-icon">🪹</span>
+            <p>The nest is empty. Archive your first bird above!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section id="about" class="about-section">
+    <div class="section-inner">
+        <h2 class="section-head">About the Archive</h2>
+        <p class="about-text">BBBird Archive is a community-driven project to preserve bird imagery from across the internet. Like the Internet Archive's Wayback Machine preserves web pages, we preserve birds — one image at a time.</p>
+    </div>
+</section>
+
+{% endblock %}

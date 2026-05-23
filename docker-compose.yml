@@ -1,0 +1,28 @@
+services:
+  nginx:
+    build: ./nginx
+    network_mode: "service:web"
+    depends_on:
+      - web
+    restart: unless-stopped
+
+  web:
+    build: ./web
+    ports:
+      - "80:80"
+    environment:
+      - FLAG=${FLAG}
+      - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME}
+      - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    restart: unless-stopped
+
+  babelfish:
+    build: ./babelfish
+    command: -p 12345678
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    network_mode: "service:web"
+    depends_on:
+      - web

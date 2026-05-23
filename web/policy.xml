@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policymap>
+  <policy domain="resource" name="time" value="120"/>
+  <policy domain="resource" name="thread" value="2"/>
+  <policy domain="resource" name="disk" value="1GiB"/>
+  <policy domain="resource" name="map" value="512MiB"/>
+  <policy domain="resource" name="memory" value="256MiB"/>
+  <policy domain="resource" name="area" value="128MP"/>
+  <policy domain="resource" name="height" value="16KP"/>
+  <policy domain="resource" name="width" value="16KP"/>
+
+  <!-- No external helpers / filters -->
+  <policy domain="delegate" rights="none" pattern="*"/>
+  <policy domain="filter" rights="none" pattern="*"/>
+
+  <!-- Allow common/simple image formats -->
+  <policy domain="coder" rights="read|write" pattern="{JPEG,JPG,PNG,PNG8,PNG24,PNG32,PNG48,PNG64}"/>
+  <policy domain="coder" rights="read|write" pattern="{GIF,GIF87,WEBP,BMP,BMP2,BMP3}"/>
+  <policy domain="coder" rights="read|write" pattern="{ICO,CUR,TGA}"/>
+
+  <!-- Deny network/script/document/vector formats -->
+  <policy domain="coder" rights="none" pattern="{URL,HTTPS,HTTP,FTP}"/>
+  <policy domain="coder" rights="none" pattern="{MVG,MSL,TEXT,LABEL,EPHEMERAL,INFO,VID}"/>
+  <policy domain="coder" rights="none" pattern="{SVG,SVGZ,EPS,PS,AI,PDF,XPS}"/>
+
+  <!-- Deny bigger/riskier parser surfaces unless needed -->
+  <policy domain="coder" rights="none" pattern="{TIFF,TIFF64,TIF,PSD,HEIC,HEIF,AVIF,EXR,HDR,DPX,JP2}"/>
+
+  <!-- Disable @file indirection -->
+  <policy domain="path" rights="none" pattern="@*"/>
+</policymap>
